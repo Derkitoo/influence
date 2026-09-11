@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  
+  <title>Influence & Manipulation — Le Guide PWA Cialdini</title>
+  
+  <!-- PWA Meta Tags & Manifest -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4f46e5">
+  <meta name="description" content="Application guide interactive et complète basée sur 'Influence et manipulation' de Robert Cialdini. Les 7 principes, simulateur de situations, bouclier anti-manipulation et test de vulnérabilité.">
+  
+  <!-- iOS PWA Support -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Cialdini Guide">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  
+  <!-- Favicons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              800: '#3730a3',
+              900: '#312e81'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-slate-900 text-slate-100 antialiased min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
+
+  <!-- Indicateur Hors-Ligne (PWA) -->
+  <div id="offline-indicator" class="hidden bg-amber-500/95 text-slate-950 text-xs py-1.5 px-4 text-center font-semibold sticky top-0 z-50 shadow-md">
+    <div class="max-w-7xl mx-auto flex items-center justify-center gap-2">
+      <span class="w-2 h-2 rounded-full bg-slate-950 animate-ping"></span>
+      <span>Mode hors-ligne actif — L'intégralité du guide Cialdini reste 100% accessible !</span>
+    </div>
+  </div>
+
+  <!-- Bannière d'installation PWA -->
+  <aside id="pwa-install-banner" class="hidden bg-gradient-to-r from-indigo-900 via-indigo-800 to-slate-900 border-b border-indigo-500/30 text-white p-3 shadow-xl sticky top-0 z-40 transition-all">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="flex items-center gap-3 text-center sm:text-left">
+        <img src="icons/icon-192.png" alt="Cialdini App Icon" class="w-10 h-10 rounded-xl shadow border border-indigo-400/40">
+        <div>
+          <h4 class="font-bold text-sm text-indigo-200">Installer l'Application Cialdini sur votre appareil</h4>
+          <p class="text-xs text-slate-300">Accès instantané depuis votre écran d'accueil, sans navigateur et disponible hors-ligne.</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="pwa-install-btn" class="bg-indigo-500 hover:bg-indigo-600 text-white text-xs font-bold py-1.5 px-4 rounded-lg shadow transition flex items-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          Installer l'app
+        </button>
+        <button id="pwa-dismiss-btn" class="text-slate-400 hover:text-white p-1 text-xs" aria-label="Fermer">✕</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- En-tête Principal -->
+  <header class="sticky top-0 z-30 bg-slate-900/90 backdrop-blur-md border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
+      <!-- Logo & Titre -->
+      <div class="flex items-center gap-3 cursor-pointer" onclick="navigateTab('hub')">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-amber-500 p-0.5 shadow-lg flex items-center justify-center">
+          <div class="w-full h-full bg-slate-900 rounded-[10px] flex items-center justify-center">
+            <span class="text-amber-400 font-black text-lg tracking-tighter">Ψ</span>
+          </div>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-base sm:text-lg font-bold tracking-tight text-white flex items-center gap-1.5">
+              Influence <span class="text-indigo-400">&</span> Manipulation
+            </h1>
+            <span class="text-[10px] font-extrabold bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded-full border border-indigo-500/30">CIALDINI</span>
+          </div>
+          <p class="text-xs text-slate-400 hidden xs:block">Le guide psychologique complet & interactif</p>
+        </div>
+      </div>
+
+      <!-- Barre de recherche globale & Actions rapides -->
+      <div class="flex items-center gap-2 sm:gap-3 flex-1 max-w-md justify-end">
+        <div class="relative w-full max-w-xs hidden md:block">
+          <input type="text" id="global-search-input" placeholder="Rechercher (ex: Milgram, Rejet-retrait, Amorce)..." 
+                 class="w-full bg-slate-800/80 border border-slate-700 text-xs rounded-lg pl-8 pr-3 py-1.5 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition">
+          <svg class="w-4 h-4 text-slate-400 absolute left-2.5 top-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        </div>
+
+        <!-- Bouton Onboarding Demo & Tarifs -->
+        <button onclick="openOnboardingModal()" class="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/40 rounded-lg text-xs font-bold transition" title="Lancer le parcours Onboarding">
+          <span>🚀</span> <span class="hidden md:inline">Onboarding</span>
+        </button>
+        <button onclick="navigateTab('pricing')" class="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 rounded-lg text-xs font-bold transition" title="Voir les offres">
+          <span>💎</span> <span class="hidden md:inline">Offres</span>
+        </button>
+
+        <!-- Bouton Favoris -->
+        <button id="btn-open-favorites" class="p-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-slate-300 hover:text-amber-400 transition relative" title="Voir mes favoris">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+          <span id="favorites-badge" class="hidden absolute -top-1 -right-1 bg-amber-500 text-slate-950 font-black text-[9px] w-4 h-4 rounded-full flex items-center justify-center">0</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Navigation Desktop (Onglets horizontaux élégants) -->
+    <nav class="hidden lg:block border-t border-slate-800/80 bg-slate-950/40">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between overflow-x-auto no-scrollbar py-1">
+        <div class="flex items-center space-x-1 py-1">
+          <button onclick="navigateTab('hub')" class="nav-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800/60 transition flex items-center gap-1.5" data-tab="hub">
+            <span>🏠</span> Vue d'ensemble
+          </button>
+          <button onclick="navigateTab('ecosystem')" class="nav-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-indigo-300 bg-indigo-500/10 border border-indigo-500/30 hover:bg-indigo-500/20 transition flex items-center gap-1.5" data-tab="ecosystem">
+            <span>🧠</span> 5 Auteurs & Écosystème
+          </button>
+          <button onclick="navigateTab('todolist')" class="nav-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-emerald-300 bg-emerald-500/10 border border-emerald-500/30 hover:bg-emerald-500/20 transition flex items-center gap-1.5" data-tab="todolist">
+            <span>📋</span> To-Do Système 2 & Focus
+          </button>
+          <button onclick="navigateTab('notifications')" class="nav-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-purple-300 bg-purple-500/10 border border-purple-500/30 hover:bg-purple-500/20 transition flex items-center gap-1.5" data-tab="notifications">
+            <span>🔔</span> Notifications Empathiques
+          </button>
+          <button onclick="navigateTab('pricing')" class="nav-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-amber-300 bg-amber-500/10 border border-amber-500/30 hover:bg-amber-500/20 transition flex items-center gap-1.5" data-tab="pricing">
+            <span>💎</span> Tunnel & Leurre
+          </button>
+          <button onclick="navigateTab('principles')" class="nav-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800/60 transition flex items-center gap-1.5" data-tab="principles">
+            <span>⚡</span> Les 7 Principes
+          </button>
+          <button onclick="navigateTab('simulator')" class="nav-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800/60 transition flex items-center gap-1.5" data-tab="simulator">
+            <span>🎯</span> Simulateur
+          </button>
+          <button onclick="navigateTab('shield')" class="nav-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800/60 transition flex items-center gap-1.5" data-tab="shield">
+            <span>🛡️</span> Bouclier
+          </button>
+          <button onclick="navigateTab('ethical')" class="nav-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800/60 transition flex items-center gap-1.5" data-tab="ethical">
+            <span>⚖️</span> Détective
+          </button>
+          <button onclick="navigateTab('quiz')" class="nav-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-amber-300 bg-amber-500/10 border border-amber-500/30 hover:bg-amber-500/20 transition flex items-center gap-1.5" data-tab="quiz">
+            <span>📊</span> Test Psycho
+          </button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Conteneur Principal -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 pb-24 lg:pb-12">
+    
+    <!-- ============================================== -->
+    <!-- ONGLET 1 : HUB / VUE D'ENSEMBLE                -->
+    <!-- ============================================== -->
+    <section id="tab-hub" class="tab-content animate-fade-in space-y-8">
+      <!-- Hero Banner -->
+      <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-950 via-slate-900 to-slate-950 border border-indigo-500/30 p-6 sm:p-8 shadow-2xl">
+        <div class="absolute -right-16 -top-16 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="relative z-10 max-w-3xl">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 mb-3">
+            <span>⭐</span> D'APRÈS LE CHEF-D'ŒUVRE MONDIAL DE ROBERT CIALDINI
+          </span>
+          <h2 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight mb-3">
+            Comprenez les leviers invisibles qui dictent nos choix.
+          </h2>
+          <p class="text-slate-300 text-sm sm:text-base leading-relaxed mb-6">
+            Découvrez l'intégralité des mécanismes psychologiques analysés par Cialdini : les automatismes « Déclic/Déclenchement », le principe de contraste, et les 7 principes universels d'influence. Apprenez à vous protéger avec un bouclier cognitif infaillible et à convaincre avec une éthique irréprochable.
+          </p>
+          <div class="flex flex-wrap gap-3">
+            <button onclick="navigateTab('simulator')" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs sm:text-sm py-2.5 px-5 rounded-xl shadow-lg shadow-indigo-600/30 transition flex items-center gap-2">
+              <span>🎯</span> Diagnostiquer une situation
+            </button>
+            <button onclick="navigateTab('quiz')" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs sm:text-sm py-2.5 px-5 rounded-xl shadow-lg shadow-amber-500/20 transition flex items-center gap-2">
+              <span>📊</span> Évaluer ma vulnérabilité
+            </button>
+            <button onclick="navigateTab('shield')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs sm:text-sm py-2.5 px-4 rounded-xl border border-slate-700 transition flex items-center gap-2">
+              <span>🛡️</span> Bouclier d'urgence
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Les Armes d'Influence & Mécanismes Préliminaires -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Déclic / Déclenchement (Click, Whirr) -->
+        <div class="glass-card-dark rounded-2xl p-6 border border-slate-800 space-y-3">
+          <div class="flex items-center gap-2 text-indigo-400 font-bold text-sm uppercase tracking-wider">
+            <span>⚙️</span> Les Armes d'Influence
+          </div>
+          <h3 class="text-lg font-bold text-white">Le Schéma « Déclic, Déclenchement » (Click, Whirr)</h3>
+          <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+            Comme la dinde qui réagit automatiquement au son « tchip-tchip » pour nourrir un putois empaillé, l'être humain réagit à des stimuli automatiques sans mobiliser son esprit critique.
+          </p>
+          <div class="p-3.5 rounded-xl bg-indigo-950/40 border border-indigo-800/50 text-xs text-indigo-200">
+            <strong>Exemple fondateur :</strong> L'expérience de la photocopieuse d'Ellen Langer. Le mot magique <em>« parce que »</em> obtient <strong>93% d'accord</strong>, même avec un argument totalement vide de sens !
+          </div>
+        </div>
+
+        <!-- Le Principe de Contraste Perceptuel -->
+        <div class="glass-card-dark rounded-2xl p-6 border border-slate-800 space-y-3">
+          <div class="flex items-center gap-2 text-amber-400 font-bold text-sm uppercase tracking-wider">
+            <span>⚖️</span> Illusion Cognitive
+          </div>
+          <h3 class="text-lg font-bold text-white">Le Principe de Contraste Perceptuel</h3>
+          <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+            Notre cerveau n'évalue jamais un prix ou une offre dans l'absolu, mais par comparaison immédiate. Présenter d'abord une option disproportionnée rend l'option suivante providentielle.
+          </p>
+          <div class="p-3.5 rounded-xl bg-amber-950/40 border border-amber-800/50 text-xs text-amber-200">
+            <strong>Application réelle :</strong> L'agent immobilier qui fait visiter deux taudis hors de prix en premier. La troisième maison, normale et au juste prix, semble alors un miracle inespéré.
+          </div>
+        </div>
+      </div>
+
+      <!-- La Triade de Cialdini -->
+      <div class="glass-card-dark rounded-2xl p-6 border border-slate-800 space-y-4">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <span>🎭</span> La Triade de Cialdini : Comment nous utilisons l'influence
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" id="triad-container">
+          <!-- Injecté dynamiquement par JS -->
+        </div>
+      </div>
+
+      <!-- Grille d'accès rapide aux 7 Principes -->
+      <div class="space-y-4">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg sm:text-xl font-extrabold text-white flex items-center gap-2">
+            <span>⚡</span> Les 7 Principes Fondamentaux de Cialdini
+          </h3>
+          <button onclick="navigateTab('principles')" class="text-xs text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-1">
+            Tout explorer →
+          </button>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="hub-principles-grid">
+          <!-- Cartes principes injectées par JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- ONGLET 2 : LES 7 PRINCIPES EN DÉTAIL           -->
+    <!-- ============================================== -->
+    <section id="tab-principles" class="tab-content hidden space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-2xl font-extrabold text-white">L'Encyclopédie des 7 Principes</h2>
+          <p class="text-xs sm:text-sm text-slate-400">Cliquez sur un principe pour ouvrir son dossier complet, ses études scientifiques, ses pièges et parades.</p>
+        </div>
+        <!-- Filtres par catégorie -->
+        <div class="flex flex-wrap gap-2 text-xs">
+          <button class="filter-btn active px-3 py-1.5 rounded-lg bg-indigo-600 text-white font-medium" data-filter="all">Tous les 7</button>
+          <button class="filter-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700" data-filter="relational">Relationnels</button>
+          <button class="filter-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700" data-filter="cognitive">Cognitifs</button>
+          <button class="filter-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700" data-filter="social">Sociaux</button>
+        </div>
+      </div>
+
+      <!-- Liste détaillée des 7 principes -->
+      <div class="space-y-6" id="principles-full-list">
+        <!-- Injecté dynamiquement par app.js -->
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- ONGLET 3 : SIMULATEUR DE SITUATION             -->
+    <!-- ============================================== -->
+    <section id="tab-simulator" class="tab-content hidden space-y-6">
+      <div class="max-w-3xl">
+        <h2 class="text-2xl font-extrabold text-white flex items-center gap-2">
+          <span>🎯</span> Simulateur & Détecteur de Manipulation
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-400">Sélectionnez un cas réel du quotidien ou décrivez votre situation pour identifier immédiatement le principe exploité et la parade optimale.</p>
+      </div>
+
+      <!-- Sélecteur de scénario prédéfini -->
+      <div class="glass-card-dark rounded-2xl p-5 border border-slate-800 space-y-4">
+        <label class="text-xs font-bold text-slate-300 uppercase tracking-wider block">1. Choisissez un cas d'école concret :</label>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5" id="scenario-buttons-container">
+          <!-- Injecté dynamiquement -->
+        </div>
+      </div>
+
+      <!-- Affichage de l'analyse du scénario sélectionné -->
+      <div id="scenario-result-card" class="glass-card-dark rounded-2xl p-6 border border-indigo-500/40 space-y-5 shadow-2xl">
+        <!-- Détails injectés par app.js -->
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- ONGLET 4 : BOUCLIER ANTI-MANIPULATION          -->
+    <!-- ============================================== -->
+    <section id="tab-shield" class="tab-content hidden space-y-8">
+      <div class="max-w-3xl">
+        <h2 class="text-2xl font-extrabold text-white flex items-center gap-2">
+          <span>🛡️</span> Le Bouclier Anti-Manipulation
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-400">Le guide d'auto-défense cognitive préconisé par Cialdini : écoutez vos signaux corporels, déployez les contre-attaques verbales et auditez vos choix.</p>
+      </div>
+
+      <!-- Les 3 Signaux Viscéraux d'Alerte -->
+      <div class="space-y-4">
+        <h3 class="text-lg font-bold text-amber-300 flex items-center gap-2">
+          <span>⚡</span> Vos 3 Alarmes Physiologiques Infaillibles
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="visceral-signals-grid">
+          <!-- Injecté par JS -->
+        </div>
+      </div>
+
+      <!-- 6 Ripostes Verbales Prêtes à l'Emploi -->
+      <div class="space-y-4">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-bold text-indigo-300 flex items-center gap-2">
+            <span>💬</span> 6 Formules Verbales de Riposte Immédiate
+          </h3>
+          <span class="text-xs text-slate-400">Cliquez pour copier la phrase</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5" id="verbal-shields-grid">
+          <!-- Injecté par JS -->
+        </div>
+      </div>
+
+      <!-- Audit "Stop 5 Secondes" avant de dire OUI -->
+      <div class="glass-card-dark rounded-2xl p-6 border border-slate-800 space-y-4">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">⏱️</span>
+          <div>
+            <h3 class="text-base font-bold text-white">L'Audit « Stop 5 Secondes » avant d'accepter une offre</h3>
+            <p class="text-xs text-slate-400">Cochez mentalement ces 5 points avant de signer un devis ou d'accepter une requête pressante :</p>
+          </div>
+        </div>
+        <div class="space-y-2.5 text-xs sm:text-sm text-slate-300" id="five-second-audit-list">
+          <!-- Injecté par JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- ONGLET 5 : LE GUIDE DU DÉTECTIVE ÉTHIQUE       -->
+    <!-- ============================================== -->
+    <section id="tab-ethical" class="tab-content hidden space-y-6">
+      <div class="max-w-3xl">
+        <h2 class="text-2xl font-extrabold text-white flex items-center gap-2">
+          <span>⚖️</span> Le Guide du Détective Éthique
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-400">« Ne soyez ni le Maladroit qui ignore les leviers, ni le Contrebandier qui les falsifie. Soyez le Détective qui éclaire les vérités authentiques. » — Robert Cialdini</p>
+      </div>
+
+      <!-- Mantra Éthique -->
+      <div class="p-4 rounded-xl bg-gradient-to-r from-emerald-950/60 to-slate-900 border border-emerald-500/40 text-emerald-200 text-xs sm:text-sm font-medium leading-relaxed">
+        <strong>Règle fondamentale d'intégrité :</strong> Ne fabriquez jamais artificiellement un principe (fausse rareté, faux témoignages, fausse gentillesse). Votre travail consiste à investiguer pour identifier les atouts réels et les présenter avec transparence pour créer un accord mutuellement profitable.
+      </div>
+
+      <!-- Scripts Éthiques par Principe -->
+      <div class="space-y-4" id="ethical-principles-container">
+        <!-- Injecté par JS -->
+      </div>
+
+      <!-- Outil Interactif : Le Transformateur Avis -> Conseil (Principe d'Unité) -->
+      <div class="glass-card-dark rounded-2xl p-6 border border-indigo-500/30 space-y-4">
+        <h3 class="text-base font-bold text-indigo-300 flex items-center gap-2">
+          <span>💡</span> Outil d'Unité : Transformez une demande d'« Avis » en demande de « Conseil »
+        </h3>
+        <p class="text-xs text-slate-300 leading-relaxed">
+          Demander un avis met votre interlocuteur dans la posture d'un juge extérieur critique. Demander un conseil l'invite à devenir votre allié et votre co-créateur !
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+          <div class="p-3.5 rounded-xl bg-rose-950/30 border border-rose-800/40 text-rose-200">
+            <span class="font-bold block text-rose-400 mb-1">❌ À éviter (Distance critique) :</span>
+            « Que penses-tu de mon projet ? Quel est ton avis ? »
+          </div>
+          <div class="p-3.5 rounded-xl bg-emerald-950/30 border border-emerald-800/40 text-emerald-200">
+            <span class="font-bold block text-emerald-400 mb-1">✅ Formulation de Détective (Unité & Co-création) :</span>
+            « Avec ton expertise, quel conseil me donnerais-tu pour que ce projet soit un plein succès ? »
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- ONGLET 6 : EXPÉRIENCES SCIENTIFIQUES           -->
+    <!-- ============================================== -->
+    <section id="tab-studies" class="tab-content hidden space-y-6">
+      <div class="max-w-3xl">
+        <h2 class="text-2xl font-extrabold text-white flex items-center gap-2">
+          <span>🧪</span> Bibliothèque des Grandes Expériences
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-400">Explorez les études fondatrices de la psychologie sociale qui ont révélé les rouages cachés de notre esprit.</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="studies-grid">
+        <!-- Injecté dynamiquement par JS -->
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- ONGLET 7 : TEST DE VULNÉRABILITÉ PSYCHO        -->
+    <!-- ============================================== -->
+    <section id="tab-quiz" class="tab-content hidden space-y-6">
+      <div class="max-w-3xl">
+        <h2 class="text-2xl font-extrabold text-amber-300 flex items-center gap-2">
+          <span>📊</span> Test de Vulnérabilité aux 7 Armes d'Influence
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-400">14 situations concrètes du quotidien pour mesurer votre quotient d'immunité psychologique et découvrir vos zones de vigilance prioritaires.</p>
+      </div>
+
+      <!-- Écran du Quiz en cours -->
+      <div id="quiz-runner-card" class="glass-card-dark rounded-2xl p-6 sm:p-8 border border-slate-800 space-y-6">
+        <!-- En-tête progression -->
+        <div class="flex items-center justify-between text-xs text-slate-400">
+          <span>Question <strong id="quiz-current-num" class="text-white">1</strong> sur <strong id="quiz-total-num">14</strong></span>
+          <span id="quiz-principle-badge" class="px-2.5 py-0.5 rounded-full bg-indigo-900/60 text-indigo-300 font-semibold border border-indigo-700/50">Réciprocité</span>
+        </div>
+        <!-- Barre de progression -->
+        <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+          <div id="quiz-progress-bar" class="h-full bg-gradient-to-r from-indigo-500 to-amber-500 transition-all duration-300" style="width: 7%;"></div>
+        </div>
+
+        <!-- Énoncé de la question -->
+        <div class="space-y-2">
+          <h3 id="quiz-question-text" class="text-base sm:text-lg font-bold text-white leading-snug">
+            <!-- Question injectée -->
+          </h3>
+        </div>
+
+        <!-- Options de réponse -->
+        <div id="quiz-options-container" class="space-y-3">
+          <!-- Boutons d'options injectés -->
+        </div>
+      </div>
+
+      <!-- Écran des Résultats du Quiz (initialement masqué) -->
+      <div id="quiz-results-card" class="hidden glass-card-dark rounded-2xl p-6 sm:p-8 border border-amber-500/40 space-y-6">
+        <div class="text-center space-y-2">
+          <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/40 text-2xl font-black mb-1">
+            🛡️
+          </div>
+          <h3 class="text-xl sm:text-2xl font-black text-white">Votre Bilan de Résistance Psychologique</h3>
+          <p class="text-xs sm:text-sm text-slate-400">Analyse de vos réponses face aux 7 armes d'influence de Robert Cialdini</p>
+        </div>
+
+        <!-- Jauge globale d'immunité -->
+        <div class="p-6 rounded-2xl bg-slate-950/70 border border-slate-800 text-center space-y-2">
+          <div class="text-xs uppercase tracking-widest text-slate-400 font-bold">Indice Global d'Immunité Cognitive</div>
+          <div id="quiz-global-score" class="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-indigo-300 to-emerald-400">
+            85%
+          </div>
+          <p id="quiz-global-verdict" class="text-xs sm:text-sm font-medium text-slate-300 max-w-lg mx-auto">
+            <!-- Verdict global -->
+          </p>
+        </div>
+
+        <!-- Détail par principe (Jauges de résistance) -->
+        <div class="space-y-3">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300">Résistance détaillée par Principe :</h4>
+          <div id="quiz-breakdown-bars" class="space-y-2.5">
+            <!-- Barres injectées -->
+          </div>
+        </div>
+
+        <!-- Recommandation personnalisée -->
+        <div id="quiz-personalized-advice" class="p-4 rounded-xl bg-indigo-950/40 border border-indigo-800/60 text-xs sm:text-sm text-indigo-200 leading-relaxed">
+          <!-- Conseil injecté -->
+        </div>
+
+        <!-- Bouton Recommencer -->
+        <div class="flex justify-center pt-2">
+          <button onclick="restartQuiz()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold py-2.5 px-6 rounded-xl transition">
+            🔄 Recommencer le test
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- ONGLET 8 : ÉCOSYSTÈME DES 5 AUTEURS BEHAVIORAL -->
+    <!-- ============================================== -->
+    <section id="tab-ecosystem" class="tab-content hidden space-y-8">
+      <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-950 via-slate-900 to-purple-950 border border-indigo-500/30 p-6 sm:p-8 shadow-2xl">
+        <div class="relative z-10 max-w-3xl">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 mb-3">
+            <span>🧠</span> L'ALLIANCE DE LA SCIENCE COMPORTEMENTALE
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight leading-tight mb-2">
+            L'Écosystème d'Influence Éthique & Architecture des Choix
+          </h2>
+          <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+            Pour dépasser les simples techniques de persuasion de Robert Cialdini, notre plateforme fusionne les découvertes de 5 maîtres contemporains de la décision humaine : <strong>Kahneman, Ariely, Thaler & Sunstein, Eyal et Voss</strong>.
+          </p>
+        </div>
+      </div>
+
+      <!-- Grille des 5 Auteurs -->
+      <div class="space-y-4">
+        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+          <span>👥</span> Les 5 Maîtres & Leurs Concepts Piliers
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="ecosystem-authors-grid">
+          <!-- Injecté par JS -->
+        </div>
+      </div>
+
+      <!-- Cartographie des 4 Modules Évolués -->
+      <div class="glass-card-dark rounded-2xl p-6 border border-slate-800 space-y-4">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <span>🛠️</span> Les 4 Piliers UX Comportementaux Implémentés
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+          <div onclick="openOnboardingModal()" class="p-4 rounded-xl bg-slate-950/60 border border-slate-800 hover:border-emerald-500/40 cursor-pointer transition space-y-1.5 group">
+            <span class="text-[10px] font-extrabold text-emerald-400 block">MODULE A</span>
+            <h4 class="font-bold text-white group-hover:text-emerald-300">Onboarding & Choix par Défaut</h4>
+            <p class="text-slate-400 text-[11px]">Option par défaut bienveillante (Thaler), pouvoir du gratuit (Ariely) & déclencheur externe (Eyal).</p>
+            <span class="text-emerald-400 font-semibold text-[10px] block pt-1">Ouvrir le parcours →</span>
+          </div>
+          <div onclick="navigateTab('todolist')" class="p-4 rounded-xl bg-slate-950/60 border border-slate-800 hover:border-blue-500/40 cursor-pointer transition space-y-1.5 group">
+            <span class="text-[10px] font-extrabold text-blue-400 block">MODULE B</span>
+            <h4 class="font-bold text-white group-hover:text-blue-300">To-Do Délibérative Système 2</h4>
+            <p class="text-slate-400 text-[11px]">Planification Système 2 (Kahneman), capital de clarté (Eyal) & focus de groupe (Cialdini/Thaler).</p>
+            <span class="text-blue-400 font-semibold text-[10px] block pt-1">Tester la to-do →</span>
+          </div>
+          <div onclick="navigateTab('notifications')" class="p-4 rounded-xl bg-slate-950/60 border border-slate-800 hover:border-purple-500/40 cursor-pointer transition space-y-1.5 group">
+            <span class="text-[10px] font-extrabold text-purple-400 block">MODULE C</span>
+            <h4 class="font-bold text-white group-hover:text-purple-300">Rétention & Empathie Tactique</h4>
+            <p class="text-slate-400 text-[11px]">Étiquetage émotionnel anti-culpabilité (Voss) & boucle de récompense variable (Eyal).</p>
+            <span class="text-purple-400 font-semibold text-[10px] block pt-1">Simuler les notifs →</span>
+          </div>
+          <div onclick="navigateTab('pricing')" class="p-4 rounded-xl bg-slate-950/60 border border-slate-800 hover:border-amber-500/40 cursor-pointer transition space-y-1.5 group">
+            <span class="text-[10px] font-extrabold text-amber-400 block">MODULE D</span>
+            <h4 class="font-bold text-white group-hover:text-amber-300">Tunnel d'Achat & Effet de Leurre</h4>
+            <p class="text-slate-400 text-[11px]">Ancrage d'expert (Voss), effet de leurre asymétrique (Ariely) & sortie éthique transparente.</p>
+            <span class="text-amber-400 font-semibold text-[10px] block pt-1">Voir la grille →</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- ONGLET 9 : TO-DO SYSTÈME 2 & FOCUS (MODULE B)  -->
+    <!-- ============================================== -->
+    <section id="tab-todolist" class="tab-content hidden space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-2xl font-extrabold text-white flex items-center gap-2">
+            <span>📋</span> To-Do Délibérative Système 2
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-400">Ralentissement cognitif de Kahneman, capitalisation d'Eyal et focus collectif de Cialdini & Thaler.</p>
+        </div>
+        <button onclick="openSystem2Modal()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs sm:text-sm py-2.5 px-4 rounded-xl shadow-lg transition flex items-center gap-2">
+          <span>⚡</span> + Planifier un objectif Système 2
+        </button>
+      </div>
+
+      <!-- Widget Sprint de Focus Collectif (Preuve Sociale + Rareté) -->
+      <div class="p-4 rounded-2xl bg-gradient-to-r from-indigo-950 via-slate-900 to-indigo-900 border border-indigo-500/40 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
+        <div class="flex items-center gap-3">
+          <span class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 text-lg flex items-center justify-center border border-amber-500/30">⚡</span>
+          <div>
+            <div class="flex items-center gap-2">
+              <h4 class="text-xs sm:text-sm font-bold text-white">Sprint de Focus Collectif (90 min)</h4>
+              <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">EN COURS</span>
+            </div>
+            <p class="text-xs text-slate-300 mt-0.5">
+              <strong class="text-amber-300" id="focus-users-count">342 décideurs</strong> travaillent en silence en ce moment.
+            </p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
+          <div class="text-right">
+            <span class="text-[10px] uppercase text-slate-400 font-bold block">Inscriptions fermées dans</span>
+            <span id="focus-timer" class="text-xs sm:text-sm font-mono font-bold text-amber-400">11m 45s</span>
+          </div>
+          <button onclick="joinFocusSprint()" id="btn-join-sprint" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs py-2 px-4 rounded-xl transition">
+            Rejoindre la session
+          </button>
+        </div>
+      </div>
+
+      <!-- Jauge d'Investissement & Capital de Clarté (Nir Eyal - Stored Value) -->
+      <div class="glass-card-dark rounded-2xl p-5 border border-slate-800 space-y-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="text-base">💎</span>
+            <div>
+              <h4 class="text-xs sm:text-sm font-bold text-white">Capital de Clarté Décisionnelle (Stored Value)</h4>
+              <p class="text-[11px] text-slate-400">Chaque tâche accomplie affine la prédiction de vos cycles d'énergie.</p>
+            </div>
+          </div>
+          <div class="text-right">
+            <span id="clarity-score" class="text-base font-black text-indigo-400">94%</span>
+            <span class="text-[10px] text-slate-400 block">Calibré</span>
+          </div>
+        </div>
+        <div class="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden">
+          <div id="clarity-progress-bar" class="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-emerald-400 transition-all duration-500" style="width: 94%;"></div>
+        </div>
+        <div class="flex justify-between text-[10px] text-slate-400">
+          <span>Niveau : Décideur Stratège</span>
+          <span id="clarity-points">Points d'investissement : 470 pts</span>
+        </div>
+      </div>
+
+      <!-- Liste interactive des tâches Système 2 -->
+      <div class="space-y-3" id="todo-tasks-container">
+        <!-- Tâches injectées par app.js -->
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- ONGLET 10 : MOTEUR DE NOTIFICATIONS (MODULE C) -->
+    <!-- ============================================== -->
+    <section id="tab-notifications" class="tab-content hidden space-y-6">
+      <div class="max-w-3xl">
+        <h2 class="text-2xl font-extrabold text-white flex items-center gap-2">
+          <span>🔔</span> Simulateur de Notifications Empathiques
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-400">
+          Rétention éthique sans culpabilité : étiquetage émotionnel de Chris Voss (*« Il semble que... »*) et récompenses variables de Nir Eyal (*Curiosity Gap*).
+        </p>
+      </div>
+
+      <!-- Sélecteur de types de notifications -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3" id="notif-selector-buttons">
+        <!-- Boutons injectés -->
+      </div>
+
+      <!-- Simulateur Visuel Mobile de Push Notification -->
+      <div class="glass-card-dark rounded-2xl p-6 sm:p-8 border border-purple-500/40 space-y-6 shadow-2xl">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+          <span class="text-xs font-bold uppercase tracking-wider text-purple-300 flex items-center gap-2">
+            <span>📱</span> Aperçu Écran de Verrouillage
+          </span>
+          <button onclick="triggerSimulatedPush()" class="text-xs bg-purple-600 hover:bg-purple-500 text-white font-bold py-1.5 px-3 rounded-lg transition shadow">
+            Envoyer un test en direct ⚡
+          </button>
+        </div>
+
+        <!-- Carte Notification Style iOS/Android -->
+        <div class="max-w-md mx-auto bg-slate-950/90 rounded-2xl p-4 border border-purple-500/30 shadow-2xl space-y-3 animate-fade-in" id="mobile-push-preview">
+          <!-- Injecté par JS -->
+        </div>
+
+        <!-- Explication psychologique du mécanisme -->
+        <div id="notif-mechanism-explanation" class="p-4 rounded-xl bg-slate-950/50 border border-slate-800 text-xs text-slate-300 leading-relaxed">
+          <!-- Explication injectée -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- ONGLET 11 : TUNNEL D'ACHAT & LEURRE (MODULE D) -->
+    <!-- ============================================== -->
+    <section id="tab-pricing" class="tab-content hidden space-y-8">
+      <!-- En-tête Ancrage Extrême de Valeur (Chris Voss) -->
+      <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-amber-950/40 via-slate-900 to-slate-950 border border-amber-500/40 p-6 sm:p-8 shadow-2xl text-center max-w-3xl mx-auto space-y-3">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+          <span>⚖️</span> ANCRAGE DE VALEUR DE CHRIS VOSS
+        </span>
+        <h2 class="text-xl sm:text-2xl font-black text-white">
+          Un coaching exécutif individuel coûte en moyenne 180 € / heure.
+        </h2>
+        <p class="text-slate-300 text-xs sm:text-sm max-w-xl mx-auto leading-relaxed">
+          Bénéficiez d'un copilote d'aide à la décision et de productivité délibérative disponible 24h/24 pour l'équivalent d'un simple café par semaine.
+        </p>
+      </div>
+
+      <!-- Grille Tarifaire à 3 Niveaux avec Effet de Leurre (Dan Ariely) -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto" id="pricing-tiers-grid">
+        <!-- Cartes tarifaires injectées par JS -->
+      </div>
+
+      <!-- Sortie Éthique & Question Calibrée (Chris Voss & Richard Thaler) -->
+      <div class="max-w-2xl mx-auto text-center space-y-3 pt-4 border-t border-slate-800">
+        <p class="text-xs sm:text-sm text-slate-400 italic">
+          « Serait-ce une mauvaise idée de tester la version Pro pendant vos 14 prochains jours sans aucun engagement ? »
+        </p>
+        <div class="flex justify-center gap-4">
+          <button onclick="navigateTab('hub')" class="text-xs text-slate-400 hover:text-white underline">
+            Continuer avec la version gratuite limitée
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- ============================================== -->
+  <!-- BARRE DE NAVIGATION INFÉRIEURE (MOBILE)        -->
+  <!-- ============================================== -->
+  <nav class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-900/95 backdrop-blur-lg border-t border-slate-800 mobile-nav-bar">
+    <div class="grid grid-cols-5 gap-1 px-2 py-1.5 text-[10px] text-center">
+      <button onclick="navigateTab('hub')" class="mobile-nav-btn flex flex-col items-center justify-center p-1 text-slate-400 hover:text-white" data-tab="hub">
+        <span class="text-base mb-0.5">🏠</span>
+        <span>Accueil</span>
+      </button>
+      <button onclick="navigateTab('principles')" class="mobile-nav-btn flex flex-col items-center justify-center p-1 text-slate-400 hover:text-white" data-tab="principles">
+        <span class="text-base mb-0.5">⚡</span>
+        <span>7 Principes</span>
+      </button>
+      <button onclick="navigateTab('simulator')" class="mobile-nav-btn flex flex-col items-center justify-center p-1 text-slate-400 hover:text-white" data-tab="simulator">
+        <span class="text-base mb-0.5">🎯</span>
+        <span>Simulateur</span>
+      </button>
+      <button onclick="navigateTab('shield')" class="mobile-nav-btn flex flex-col items-center justify-center p-1 text-slate-400 hover:text-white" data-tab="shield">
+        <span class="text-base mb-0.5">🛡️</span>
+        <span>Bouclier</span>
+      </button>
+      <button onclick="navigateTab('quiz')" class="mobile-nav-btn flex flex-col items-center justify-center p-1 text-amber-400 hover:text-amber-300 font-bold" data-tab="quiz">
+        <span class="text-base mb-0.5">📊</span>
+        <span>Test</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ============================================== -->
+  <!-- MODALES                                        -->
+  <!-- ============================================== -->
+  <!-- Modale Détail Principe -->
+  <div id="principle-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop animate-fade-in">
+    <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      <div class="p-4 sm:p-6 border-b border-slate-800 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span id="modal-principle-icon" class="text-2xl">⚡</span>
+          <div>
+            <h3 id="modal-principle-title" class="text-lg font-bold text-white">Titre du Principe</h3>
+            <span id="modal-principle-badge" class="text-xs text-indigo-400 font-medium">Badge</span>
+          </div>
+        </div>
+        <button onclick="closeModal('principle-modal')" class="text-slate-400 hover:text-white p-1 rounded-lg">✕</button>
+      </div>
+      <div id="modal-principle-body" class="p-4 sm:p-6 overflow-y-auto space-y-4 text-xs sm:text-sm text-slate-300">
+        <!-- Injecté par JS -->
+      </div>
+      <div class="p-4 border-t border-slate-800 flex justify-end">
+        <button onclick="closeModal('principle-modal')" class="bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold py-2 px-4 rounded-xl">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modale Favoris -->
+  <div id="favorites-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop animate-fade-in">
+    <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-lg w-full max-h-[80vh] flex flex-col shadow-2xl overflow-hidden">
+      <div class="p-4 border-b border-slate-800 flex items-center justify-between">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <span>⭐</span> Vos Contre-Mesures et Fiches Favorites
+        </h3>
+        <button onclick="closeModal('favorites-modal')" class="text-slate-400 hover:text-white p-1">✕</button>
+      </div>
+      <div id="favorites-modal-list" class="p-4 overflow-y-auto space-y-3 text-xs">
+        <!-- Favoris injectés -->
+      </div>
+      <div class="p-4 border-t border-slate-800 flex justify-between items-center">
+        <button onclick="clearAllFavorites()" class="text-xs text-rose-400 hover:text-rose-300">Tout effacer</button>
+        <button onclick="closeModal('favorites-modal')" class="bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold py-2 px-4 rounded-xl">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modale Onboarding Éthique (Module A) -->
+  <div id="onboarding-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop animate-fade-in">
+    <div class="bg-slate-900 border border-emerald-500/40 rounded-2xl max-w-xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      <div class="p-5 border-b border-slate-800 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <span class="text-2xl">🚀</span>
+          <div>
+            <h3 class="text-base sm:text-lg font-black text-white">Activation Guidée en 3 Clics</h3>
+            <span class="text-xs text-emerald-400 font-semibold">Architecture des Choix de Thaler & Gratuit d'Ariely</span>
+          </div>
+        </div>
+        <button onclick="closeModal('onboarding-modal')" class="text-slate-400 hover:text-white p-1">✕</button>
+      </div>
+      <div class="p-5 overflow-y-auto space-y-4 text-xs sm:text-sm text-slate-300">
+        <!-- Badge Gratuit Ariely -->
+        <div class="p-3.5 rounded-xl bg-emerald-950/40 border border-emerald-500/40 text-emerald-200 flex items-center gap-3">
+          <span class="text-2xl">🎁</span>
+          <div>
+            <strong class="text-white block font-bold">Votre passe 30 jours 100% offert et libre</strong>
+            <p class="text-[11px] text-emerald-300">Aucune carte bancaire requise. Zéro engagement financier. Pure norme sociale d'entraide.</p>
+          </div>
+        </div>
+
+        <!-- Architecture des Choix (Thaler) -->
+        <div class="space-y-2">
+          <label class="font-bold text-white uppercase text-[11px] tracking-wider block">Calibrez votre rythme d'accompagnement :</label>
+          <div class="space-y-2" id="onboarding-choice-container">
+            <label class="flex items-center justify-between p-3 rounded-xl bg-slate-950/60 border border-slate-800 cursor-pointer hover:border-slate-700 transition">
+              <div class="flex items-center gap-2.5">
+                <input type="radio" name="onboarding-cadence" value="autonome" class="text-indigo-600 focus:ring-indigo-500 bg-slate-800 border-slate-700">
+                <span>Autonome (0 notification)</span>
+              </div>
+              <span class="text-[10px] text-slate-500">Silence radio</span>
+            </label>
+
+            <label class="flex items-center justify-between p-3.5 rounded-xl bg-indigo-950/40 border-2 border-indigo-500 cursor-pointer shadow-lg transition">
+              <div class="flex items-center gap-2.5">
+                <input type="radio" name="onboarding-cadence" value="coach" checked class="text-indigo-600 focus:ring-indigo-500 bg-slate-800 border-slate-700">
+                <div>
+                  <strong class="text-white block font-bold">Coach de Clarté (1 micro-point focal à 8h30)</strong>
+                  <span class="text-[11px] text-indigo-300">Option recommandée pour maximiser votre clarté sans surcharge</span>
+                </div>
+              </div>
+              <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-indigo-500 text-white shrink-0">PAR DÉFAUT</span>
+            </label>
+
+            <label class="flex items-center justify-between p-3 rounded-xl bg-slate-950/60 border border-slate-800 cursor-pointer hover:border-slate-700 transition">
+              <div class="flex items-center gap-2.5">
+                <input type="radio" name="onboarding-cadence" value="cadence" class="text-indigo-600 focus:ring-indigo-500 bg-slate-800 border-slate-700">
+                <span>Cadence Haute (Matin & Soir)</span>
+              </div>
+              <span class="text-[10px] text-slate-500">2 points/jour</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Déclencheur Externe Eyal -->
+        <div class="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-1">
+          <span class="text-[10px] font-bold uppercase tracking-wider text-amber-400">⚡ Premier Déclencheur Externe (Modèle Hook) :</span>
+          <p class="text-xs text-slate-200 font-mono italic">« Votre espace est prêt. Quelle est la seule chose importante que vous souhaitez accomplir avant midi ? (Tapez 1 mot) »</p>
+        </div>
+      </div>
+      <div class="p-4 border-t border-slate-800 flex justify-between items-center bg-slate-950/50">
+        <span class="text-[11px] text-slate-400">Résiliez ou ajustez en 1 clic à tout moment</span>
+        <button onclick="confirmOnboarding()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold py-2.5 px-5 rounded-xl shadow-lg transition">
+          Valider mon accès 30 jours →
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modale Sas de Décision Système 2 (Module B - Kahneman) -->
+  <div id="system2-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop animate-fade-in">
+    <div class="bg-slate-900 border border-indigo-500/50 rounded-2xl max-w-lg w-full flex flex-col shadow-2xl overflow-hidden">
+      <div class="p-5 border-b border-slate-800 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <span class="text-2xl">🧠</span>
+          <div>
+            <h3 class="text-base font-black text-white">Sas de Décision Délibératif (Système 2)</h3>
+            <span class="text-xs text-indigo-400 font-semibold">Daniel Kahneman — Ralentir pour mieux accomplir</span>
+          </div>
+        </div>
+        <button onclick="closeModal('system2-modal')" class="text-slate-400 hover:text-white p-1">✕</button>
+      </div>
+      <form onsubmit="handleCreateSystem2Task(event)" class="p-5 space-y-4 text-xs sm:text-sm">
+        <div class="p-3 rounded-xl bg-indigo-950/30 border border-indigo-800/40 text-[11px] text-indigo-200 leading-relaxed">
+          « Les objectifs vagues sont abandonnés dans 85% des cas. Accordez 20 secondes à votre Système 2 pour lever toute ambiguïté. »
+        </div>
+
+        <div class="space-y-1">
+          <label class="font-bold text-white uppercase text-[10px] tracking-wider block">1. Quel est votre objectif majeur ?</label>
+          <input type="text" id="task-title-input" required placeholder="ex: Finaliser la synthèse du projet Alpha..." 
+                 class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500">
+        </div>
+
+        <div class="space-y-1">
+          <label class="font-bold text-white uppercase text-[10px] tracking-wider block">2. Où & Quand ? (Implementation Intention)</label>
+          <input type="text" id="task-context-input" required placeholder="ex: Demain à 10h00, bureau fermé, téléphone en silencieux..." 
+                 class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500">
+        </div>
+
+        <div class="space-y-1">
+          <label class="font-bold text-white uppercase text-[10px] tracking-wider block">3. Le tout premier micro-pas de 2 minutes ?</label>
+          <input type="text" id="task-micropas-input" required placeholder="ex: Ouvrir le document et taper les 3 grandes parties..." 
+                 class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500">
+        </div>
+
+        <div class="pt-2 flex justify-end gap-2">
+          <button type="button" onclick="closeModal('system2-modal')" class="bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold py-2 px-4 rounded-xl">
+            Annuler
+          </button>
+          <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold py-2 px-5 rounded-xl shadow-lg transition">
+            Engager mon Système 2 ⚡
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- Toast Notification -->
+  <div id="toast" class="hidden fixed bottom-20 lg:bottom-6 left-1/2 -translate-x-1/2 z-50 bg-slate-950 text-white text-xs py-2.5 px-4 rounded-xl border border-indigo-500/40 shadow-2xl flex items-center gap-2 transition-all pointer-events-none">
+    <span id="toast-icon">✓</span>
+    <span id="toast-message">Action effectuée</span>
+  </div>
+
+  <!-- Scripts Applicatifs -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

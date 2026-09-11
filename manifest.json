@@ -1,0 +1,63 @@
+{
+  "name": "Influence & Manipulation — Guide Cialdini",
+  "short_name": "Cialdini PWA",
+  "description": "Application guide complète et interactive inspirée du chef-d'œuvre de Robert Cialdini : les 7 principes d'influence, le simulateur de diagnostic, le bouclier anti-manipulation et le test de vulnérabilité.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0f172a",
+  "theme_color": "#4f46e5",
+  "lang": "fr",
+  "dir": "ltr",
+  "categories": ["education", "productivity", "lifestyle", "books"],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Les 7 Principes",
+      "short_name": "Principes",
+      "description": "Explorer les 7 leviers fondamentaux de Cialdini",
+      "url": "./index.html#principles",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Simulateur de Situation",
+      "short_name": "Simulateur",
+      "description": "Diagnostiquer une situation et trouver la parade",
+      "url": "./index.html#simulator",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Bouclier Anti-Manipulation",
+      "short_name": "Bouclier",
+      "description": "Réflexes et défenses physiologiques immédiates",
+      "url": "./index.html#shield",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Test de Vulnérabilité",
+      "short_name": "Test Psycho",
+      "description": "Évaluer sa résistance aux armes d'influence",
+      "url": "./index.html#quiz",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}
