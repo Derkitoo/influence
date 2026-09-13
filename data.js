@@ -504,7 +504,100 @@ const CIALDINI_DATA = {
     }
   ],
 
-  // 8 SCÉNARIOS RÉELS POUR LE SIMULATEUR INTERACTIF
+  // GRANDES HISTOIRES & ANECDOTES VÉCUES DU LIVRE (EDITION FRANÇAISE ORIGINALE)
+  bookAnecdotes: [
+    {
+      id: "anecdote-turquoise",
+      chapter: "Chapitre 1 : Les armes de l'influence",
+      title: "Les bijoux de turquoise en Arizona",
+      characters: "Une amie bijoutière de Cialdini et sa vendeuse",
+      concept: "Le raccourci automatique « cher = de bonne qualité »",
+      summary: "Une commerçante en Arizona ne parvenait pas à écouler un lot de bijoux en turquoise malgré l'affluence estivale. Désespérée avant de partir en voyage d'achats, elle laissa une note griffonnée : « Tout ce présentoir, prix x 1/2 ». À son retour, tout était vendu... parce que l'employée avait lu « x 2 » ! Les touristes, guidés par la règle machinale « cher = de bonne qualité », s'étaient rués sur les bijoux perçus comme bien plus précieux dès lors que leur prix avait doublé.",
+      takeaway: "Dans un monde moderne complexe, nous utilisons le prix comme substitut rapide de la valeur pour économiser l'effort d'évaluation technique."
+    },
+    {
+      id: "anecdote-drubeck",
+      chapter: "Chapitre 1 : Les armes de l'influence",
+      title: "Les frères tailleurs Sid et Harry Drubeck (Années 1930)",
+      characters: "Sid (au comptoir, feignant la surdité) et Harry (couturier en arrière-boutique)",
+      concept: "Le judo psychologique et le piège de la fausse bonne affaire",
+      summary: "Quand un client essayait un costume, Sid feignait d'être dur d'oreille et criait vers l'arrière-boutique : « Harry, combien pour ce costume ? ». Harry répondait : « Pour ce magnifique modèle pure laine ? Quarante-deux dollars ! ». Sid redemandait, Harry répétait « Quarante-deux dollars ! ». Sid se tournait alors vers le client et disait doucement : « Vingt-deux dollars ». Le client, croyant profiter d'une erreur d'inattention, s'empressait de payer et de s'enfuir avec son « affaire en or » sous le bras.",
+      takeaway: "Une mise en scène exploitant l'avidité et la fausse aubaine déclenche une précipitation d'achat sans négociation."
+    },
+    {
+      id: "anecdote-sharon",
+      chapter: "Chapitre 1 : Les armes de l'influence",
+      title: "La lettre de l'étudiante Sharon à ses parents",
+      characters: "Sharon (étudiante à l'université) et ses parents",
+      concept: "Le principe de contraste perceptuel poussé au génie",
+      summary: "Sharon écrit à ses parents une lettre alarmiste : dortoir incendié, saut par la fenêtre, fracture du crâne, hospitalisation, hébergement dans la cave d'un pompiste, projet de mariage hâtif en raison d'une grossesse... Avant de conclure avec brio : « En fait, il n'y a eu ni incendie, ni fracture, ni fiancé, ni grossesse. Mais j'ai eu un D en histoire et un F en chimie, et je voulais que vous relativisiez ! ». Après un tel séisme imaginaire, un mauvais bulletin scolaire paraît dérisoire.",
+      takeaway: "Tout stimulus est perçu par contraste avec ce qui le précède. Présenter le pire rend l'inconvénient réel parfaitement acceptable."
+    },
+    {
+      id: "anecdote-tranchees",
+      chapter: "Chapitre 2 : La réciprocité",
+      title: "Le soldat dans les tranchées et le morceau de pain",
+      characters: "Un soldat d'élite allemand et un soldat français (Guerre 14-18)",
+      concept: "L'obligation universelle de réciprocité annihilant l'hostilité",
+      summary: "Rapporté par le chercheur Eibl-Eibesfeldt : un commando allemand traverse de nuit le no man's land pour capturer un ennemi et le ramener pour interrogatoire. Il surprend un soldat français seul en train de manger. Pris au dépourvu et désarmé, le Français accomplit un geste instinctif : il partage son morceau de pain et le tend à son ravisseur. Décontenancé et troublé par ce don nourricier, le soldat allemand est incapable d'accomplir sa mission : il tourne les talons et repart les mains vides.",
+      takeaway: "Le don alimentaire active une dette morale si puissante qu'elle peut suspendre l'ordre militaire et l'animosité nationale."
+    },
+    {
+      id: "anecdote-scout",
+      chapter: "Chapitre 2 : La réciprocité",
+      title: "La rencontre de Cialdini avec le jeune scout",
+      characters: "Robert Cialdini et un jeune scout vendeur",
+      concept: "La technique du rejet-retrait (concession réciproque)",
+      summary: "Dans la rue, un scout propose à Cialdini des billets pour la fête annuelle des scouts à 5 dollars pièce. Cialdini refuse poliment. Le scout enchaîne aussitôt : « Bon, si vous ne voulez pas de billets, que diriez-vous d'une de nos barres de chocolat géantes à 1 dollar seulement ? ». Cialdini en achète deux, avant de réaliser qu'il n'aime pas le chocolat, qu'il tient à son argent, et qu'il s'est fait piéger : la concession feinte du scout avait forcé une concession en retour.",
+      takeaway: "Le recul d'une demande extrême vers une demande modeste est perçu comme un compromis qui oblige la cible à céder à son tour."
+    },
+    {
+      id: "anecdote-watergate",
+      chapter: "Chapitre 2 : La réciprocité",
+      title: "L'opération insensée du cambriolage du Watergate",
+      characters: "G. Gordon Liddy, John Mitchell, Jeb Magruder (1972)",
+      concept: "La somme terrifiante du rejet-retrait et du contraste",
+      summary: "Comment des stratèges politiques chevronnés ont-ils pu approuver l'idée absurde et illégale d'aller cambrioler les bureaux démocrates du Watergate ? L'explication tient aux concessions préalables : Liddy avait d'abord proposé un plan démentiel à 1 million de dollars (commandos d'enlèvement, avion de chasse, call-girls pour chantage). Rejeté. Il revient avec un plan à 500 000 $. Rejeté. Puis il propose le « plan minimum » à 250 000 $ : les dirigeants ont consenti pour 'ne pas le laisser repartir les mains vides'.",
+      takeaway: "Après deux refus successifs d'offres exorbitantes, une proposition folle mais réduite de 75% est perçue comme un compromis raisonnable."
+    },
+    {
+      id: "anecdote-jouets",
+      chapter: "Chapitre 3 : Engagement et cohérence",
+      title: "Le circuit de course de Christopher après Noël",
+      characters: "Robert Cialdini, son fils Christopher, et un ancien fabricant de jouets",
+      concept: "Le verrouillage par la promesse et la rupture de stock orchestrée",
+      summary: "Cialdini se retrouve en janvier dans un magasin de jouets bondé à acheter un circuit automobile hors de prix pour son fils, alors qu'il venait d'acheter des charretées de cadeaux à Noël. Un ami du secteur lui révèle le secret : les marques diffusent des pubs massives avant Noël pour un jouet phare, sous-approvisionnent volontairement les rayons, forcent les parents à acheter un jouet de substitution, puis relancent la pub en janvier pour que les enfants crient « Mais papa, tu avais promis ! ».",
+      takeaway: "Le besoin d'être un parent cohérent et fidèle à sa parole rend les adultes prisonniers de leurs engagements verbaux antérieurs."
+    },
+    {
+      id: "anecdote-vincent",
+      chapter: "Chapitre 6 : L'autorité",
+      title: "Vincent le serveur d'élite et l'art de parler contre ses intérêts",
+      characters: "Vincent (serveur dans un restaurant chic) et ses clients",
+      concept: "La crédibilité absolue établie par une faille concédée",
+      summary: "Vincent observait la première personne à commander dans une grande tablée. Quand elle choisissait un plat, il se penchait d'un air conspirateur : « Ce plat n'est pas aussi réussi ce soir que d'habitude... puis-je vous suggérer plutôt celui-ci ? » (légèrement moins cher). Par ce geste, il prouvait son honnêteté désintéressée. Une fois sa crédibilité et son autorité établies, les clients lui faisaient une confiance aveugle pour recommander des bouteilles de vin prestigieuses et des desserts onéreux, faisant exploser l'addition et ses pourboires.",
+      takeaway: "Reconnaître un petit défaut ou désavantage apparent établit une sincérité incontestable pour remporter l'accord sur l'essentiel."
+    },
+    {
+      id: "anecdote-claque",
+      chapter: "Chapitre 4 : La preuve sociale",
+      title: "L'institution de la claque à l'Opéra de Paris (1820)",
+      characters: "Sauton et Porcher (L'Assurance des Succès Dramatiques)",
+      concept: "La fabrication commerciale éhontée de la preuve sociale",
+      summary: "En 1820, deux entrepreneurs parisiens fondent une agence louant des applaudisseurs professionnels aux théâtres et opéras. Ils créent des rôles spécialisés : la pleureuse (pour pleurer sur commande aux scènes tristes), le bisseur (qui crie 'bis !' et 'encore !'), et le rieur (pour rire bruyamment aux comédies). La supercherie était si officielle que les journaux de l'époque publiaient leur grille tarifaire (25 lires pour applaudir l'entrée d'un monsieur, 50 lires pour un rappel jusqu'à satisfaction).",
+      takeaway: "Même quand le public sait pertinemment qu'une réaction collective est factice ou enregistrée, le cerveau y cède mécaniquement."
+    },
+    {
+      id: "anecdote-richard",
+      chapter: "Chapitre 7 : La rareté",
+      title: "Les rendez-vous simultanés de Richard Cialdini",
+      characters: "Richard Cialdini (le frère de l'auteur) et ses acheteurs de voitures",
+      concept: "La rivalité physique directe pour une ressource limitée",
+      summary: "Pour financer ses études, le frère de Cialdini achetait des voitures d'occasion, les nettoyait et publiait une petite annonce le dimanche. Son coup de génie : donner rendez-vous à TOUS les acheteurs intéressés exactement à la même heure (ex: 14h00). Dès que le deuxième acheteur arrivait, le premier se sentait immédiatement menacé de perdre l'affaire. La rivalité visible provoquait un pic d'adrénaline et coupait toute velléité de négocier : la voiture partait au prix fort en quelques minutes.",
+      takeaway: "La concurrence visible et immédiate pour un bien convoité éteint le raisonnement rationnel et déclenche la peur viscérale de perdre."
+    }
+  ],
+
   scenarios: [
     {
       id: "sc-car-dealer",

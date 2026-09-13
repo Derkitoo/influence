@@ -935,35 +935,92 @@ function initEthicalGuide() {
 }
 
 /* ==========================================================================
-   8. BIBLIOTHÈQUE DES EXPÉRIENCES CÉLÈBRES
+   8. BIBLIOTHÈQUE DES EXPÉRIENCES CÉLÈBRES & ANECDOTES DU LIVRE
    ========================================================================== */
 function initStudies() {
   const container = document.getElementById('studies-grid');
-  if (!container) return;
+  const anecdotesContainer = document.getElementById('anecdotes-grid');
 
-  container.innerHTML = CIALDINI_DATA.studiesLibrary.map((st) => {
-    return `
-      <div class="glass-card-dark rounded-2xl p-5 border border-slate-800 space-y-3 flex flex-col justify-between">
-        <div class="space-y-2">
-          <div class="flex items-center justify-between">
-            <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-              ${st.principle}
-            </span>
-            <span class="text-[10px] text-slate-400">${st.score}</span>
+  if (container) {
+    container.innerHTML = CIALDINI_DATA.studiesLibrary.map((st) => {
+      return `
+        <div class="glass-card-dark rounded-2xl p-5 border border-slate-800 space-y-3 flex flex-col justify-between hover:border-indigo-500/40 transition">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                ${st.principle}
+              </span>
+              <span class="text-[10px] text-slate-400">${st.score}</span>
+            </div>
+            <h4 class="font-bold text-sm text-white">${st.title}</h4>
+            <p class="text-[11px] text-amber-400/90 font-medium">${st.lead}</p>
+            <p class="text-xs text-slate-300 leading-relaxed">${st.synopsis}</p>
           </div>
-          <h4 class="font-bold text-sm text-white">${st.title}</h4>
-          <p class="text-[11px] text-amber-400/90 font-medium">${st.lead}</p>
-          <p class="text-xs text-slate-300 leading-relaxed">${st.synopsis}</p>
+          <div class="pt-3 border-t border-slate-800">
+            <p class="text-[11px] text-emerald-300 font-semibold">
+              💡 Enseignement : <span class="font-normal text-slate-300">${st.takeaway}</span>
+            </p>
+          </div>
         </div>
-        <div class="pt-3 border-t border-slate-800">
-          <p class="text-[11px] text-emerald-300 font-semibold">
-            💡 Enseignement : <span class="font-normal text-slate-300">${st.takeaway}</span>
-          </p>
+      `;
+    }).join('');
+  }
+
+  if (anecdotesContainer && CIALDINI_DATA.bookAnecdotes) {
+    anecdotesContainer.innerHTML = CIALDINI_DATA.bookAnecdotes.map((an) => {
+      return `
+        <div class="glass-card-dark rounded-2xl p-5 border border-slate-800 space-y-3 flex flex-col justify-between hover:border-amber-500/40 transition">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                ${an.chapter}
+              </span>
+              <span class="text-[10px] text-slate-400">${an.characters}</span>
+            </div>
+            <h4 class="font-bold text-sm sm:text-base text-white flex items-center gap-1.5">
+              <span>📖</span> ${an.title}
+            </h4>
+            <div class="p-2.5 rounded-xl bg-slate-950/60 border border-slate-800 text-[11px] text-indigo-300 font-semibold">
+              Mécanisme : ${an.concept}
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed font-serif italic">${an.summary}</p>
+          </div>
+          <div class="pt-3 border-t border-slate-800 text-[11px] text-emerald-300 font-medium">
+            🎯 <strong>Leçon du maître :</strong> ${an.takeaway}
+          </div>
         </div>
-      </div>
-    `;
-  }).join('');
+      `;
+    }).join('');
+  }
 }
+
+function toggleStudiesView(view) {
+  const studiesGrid = document.getElementById('studies-grid');
+  const anecdotesGrid = document.getElementById('anecdotes-grid');
+  const btnStudies = document.getElementById('btn-subtab-studies');
+  const btnAnecdotes = document.getElementById('btn-subtab-anecdotes');
+
+  if (view === 'studies') {
+    if (studiesGrid) studiesGrid.classList.remove('hidden');
+    if (anecdotesGrid) anecdotesGrid.classList.add('hidden');
+    if (btnStudies) {
+      btnStudies.className = "px-3 py-1.5 rounded-lg bg-indigo-600 text-white font-bold transition";
+    }
+    if (btnAnecdotes) {
+      btnAnecdotes.className = "px-3 py-1.5 rounded-lg text-slate-400 hover:text-white font-semibold transition";
+    }
+  } else {
+    if (studiesGrid) studiesGrid.classList.add('hidden');
+    if (anecdotesGrid) anecdotesGrid.classList.remove('hidden');
+    if (btnAnecdotes) {
+      btnAnecdotes.className = "px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-black transition";
+    }
+    if (btnStudies) {
+      btnStudies.className = "px-3 py-1.5 rounded-lg text-slate-400 hover:text-white font-semibold transition";
+    }
+  }
+}
+
 
 /* ==========================================================================
    9. TEST DE VULNÉRABILITÉ PSYCHO (QUIZ)

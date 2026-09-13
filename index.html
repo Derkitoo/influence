@@ -391,20 +391,38 @@
     </section>
 
     <!-- ============================================== -->
-    <!-- ONGLET 6 : EXPÉRIENCES SCIENTIFIQUES           -->
+    <!-- ONGLET 6 : EXPÉRIENCES & ANECDOTES DU LIVRE    -->
     <!-- ============================================== -->
     <section id="tab-studies" class="tab-content hidden space-y-6">
-      <div class="max-w-3xl">
-        <h2 class="text-2xl font-extrabold text-white flex items-center gap-2">
-          <span>🧪</span> Bibliothèque des Grandes Expériences
-        </h2>
-        <p class="text-xs sm:text-sm text-slate-400">Explorez les études fondatrices de la psychologie sociale qui ont révélé les rouages cachés de notre esprit.</p>
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-2xl font-extrabold text-white flex items-center gap-2">
+            <span>🧪</span> Expériences & 📖 Histoires du Livre
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-400">Toutes les études de laboratoire et les anecdotes vécues racontées par Robert Cialdini dans l'ouvrage.</p>
+        </div>
+        <!-- Toggle études scientifiques vs anecdotes -->
+        <div class="flex items-center gap-2 bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs">
+          <button onclick="toggleStudiesView('studies')" id="btn-subtab-studies" class="px-3 py-1.5 rounded-lg bg-indigo-600 text-white font-bold transition">
+            🧪 Études Scientifiques (10)
+          </button>
+          <button onclick="toggleStudiesView('anecdotes')" id="btn-subtab-anecdotes" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white font-semibold transition">
+            📖 Histoires Vécues du Livre (10)
+          </button>
+        </div>
       </div>
 
+      <!-- Grille des Études Scientifiques -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="studies-grid">
         <!-- Injecté dynamiquement par JS -->
       </div>
+
+      <!-- Grille des Anecdotes & Récits Vécus du Livre (Masqué par défaut) -->
+      <div class="hidden grid grid-cols-1 sm:grid-cols-2 gap-4" id="anecdotes-grid">
+        <!-- Injecté dynamiquement par JS -->
+      </div>
     </section>
+
 
     <!-- ============================================== -->
     <!-- ONGLET 7 : TEST DE VULNÉRABILITÉ PSYCHO        -->
