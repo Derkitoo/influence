@@ -177,7 +177,7 @@ function navigateTab(tabId) {
     }
   });
 
-  // Mettre à jour les boutons de nav Mobile
+  // Mettre à jour les boutons de la barre basse Mobile
   document.querySelectorAll('.mobile-nav-btn').forEach((btn) => {
     if (btn.dataset.tab === tabId) {
       btn.classList.add('text-indigo-400', 'font-bold');
@@ -188,8 +188,24 @@ function navigateTab(tabId) {
     }
   });
 
+  // Mettre à jour les pilules de la barre horizontale Mobile
+  document.querySelectorAll('.mobile-subnav-btn').forEach((btn) => {
+    if (btn.dataset.subtab === tabId) {
+      btn.className = "mobile-subnav-btn whitespace-nowrap px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-600 text-white transition shrink-0 shadow";
+      btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    } else {
+      btn.className = "mobile-subnav-btn whitespace-nowrap px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 bg-slate-900 border border-slate-800 transition shrink-0";
+    }
+  });
+
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
+function openMobileMenu() {
+  const drawer = document.getElementById('mobile-drawer');
+  if (drawer) drawer.classList.remove('hidden');
+}
+
 
 /* ==========================================================================
    3. RENDU DU HUB CENTRAL

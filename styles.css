@@ -15,8 +15,14 @@ html {
 
 body {
   font-family: var(--font-sans);
-  padding-bottom: env(safe-area-inset-bottom, 1rem);
 }
+
+@media (max-width: 1023px) {
+  main {
+    padding-bottom: calc(6rem + env(safe-area-inset-bottom, 16px)) !important;
+  }
+}
+
 
 /* Personnalisation de la barre de défilement */
 ::-webkit-scrollbar {
